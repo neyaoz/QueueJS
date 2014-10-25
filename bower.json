@@ -1,0 +1,16 @@
+{
+  "name": "QueueJS",
+  "version": "0.0.1",
+  "description": "Queue JS is a simple library which can call your methods in a order you specify.",
+  "main": "queue.js",
+  "authors": [
+    "@rephole"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    ".DS_Store",
+    ".idea",
+    ".dev"
+  ]
+}
