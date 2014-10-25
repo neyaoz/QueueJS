@@ -9,11 +9,17 @@
         length: 0,
 
         add: function(callback, argArray) {
-            this.push([].slice.call(arguments));
+            this.push([
+                callback,
+                [].slice.call(1, arguments)
+            ]);
         },
 
         put: function(callback, argArray) {
-            this.splice(this.index, 0, [].slice.call(arguments));
+            this.splice(this.index, 0, [
+                callback,
+                [].slice.call(1, arguments)
+            ]);
         },
 
         run: function() {
