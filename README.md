@@ -3,7 +3,7 @@ Queue JS
 
 Queue JS is a simple library which can call your methods in a order you specify. You can make a queue with related methods, and start it whenever you want. It will call your methods one by one until complete. As you see, it's a basically kind of domino effect that can be controlled.
 
-###Examples
+###e.g.
 
 ```js
     function readData(file) {
@@ -26,4 +26,5 @@ Queue JS is a simple library which can call your methods in a order you specify.
             this.run();
         });
 
+        queue.run();
 ```
