@@ -11,14 +11,14 @@
         add: function(callback, argArray) {
             this.push([
                 callback,
-                [].slice.call(1, arguments)
+                [].slice.call(arguments, 1)
             ]);
         },
 
         put: function(callback, argArray) {
             this.splice(this.index, 0, [
                 callback,
-                [].slice.call(1, arguments)
+                [].slice.call(arguments, 1)
             ]);
         },
 
