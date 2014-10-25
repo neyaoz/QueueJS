@@ -2,7 +2,7 @@
 
 (function() {
     var
-    Quuee = function() {
+    Queue = function() {
     };
     Queue.prototype = {
         index: 0,
