@@ -60,5 +60,5 @@
     else if(typeof module === "object" && module.exports)
         module.exports = Queue;
     else
-        this.Queue = Queue;
+        window.Queue = Queue;
 })();
