@@ -25,13 +25,13 @@
 
         wait: function(ms) {
             this.put(function() {
-                window.setTimeout(this.run.bind(this), ms);
+                window.setTimeout(this.next.bind(this), ms);
             });
         },
         skip: function(count) {
             this.add(function() {
-                this.index += count;
-                this.run();
+                this.queue.index += count;
+                this.next();
             });
         },
         reset: function() {
@@ -57,11 +57,10 @@
             var queue = this.queue;
 
             if( queue.index+1 in queue ) {
-                queue.run(queue.index++);
+                return queue.run(queue.index++);
             }
             return null;
         },
-
         prev: function() {
             var queue = this.queue;
 
