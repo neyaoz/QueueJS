@@ -18,7 +18,7 @@ You can start the queue by ***run*** method.
 
 ---
 
-queue.wait(milliseconds, steps = 1)
+queue.wait(milliseconds)
 ------------------------
 
 queue.skip(steps)
@@ -43,8 +43,8 @@ You can run the next entry in the queue by  ***prev*** method.
 ```js
 function readData(file) {
     $.get(file, function() {
-        this.run();
-    });
+        this.next();
+    }.bind(this));
 };
 
 var queue  = new Queue();
