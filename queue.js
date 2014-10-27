@@ -3,46 +3,37 @@
 (function() {
     var
     Queue = function() {
+
     };
     Queue.prototype = {
         index: 0,
         length: 0,
 
         add: function(callback, argArray) {
-            this.push([
-                callback,
-                [].slice.call(arguments, 1)
-            ]);
+            this.push(new Entry(this, callback, [].slice.call(arguments, 1)));
         },
-
         put: function(callback, argArray) {
-            this.splice(this.index, 0, [
-                callback,
-                [].slice.call(arguments, 1)
-            ]);
+            this.splice(this.index+1, 0, new Entry(this, callback, [].slice.call(arguments, 1)));
         },
-
         run: function() {
-            var item;
-            if( this.index in this ) {
-                item = this[this.index++];
-                return item[0].apply(this, item[1]);
+            var entry;
+            if( entry = this[this.index] ) {
+                return entry.callback.call(entry, entry.argArray);
             }
+            return null;
         },
 
         wait: function(ms) {
-            this.add(function() {
+            this.put(function() {
                 window.setTimeout(this.run.bind(this), ms);
             });
         },
-
         skip: function(count) {
             this.add(function() {
                 this.index += count;
                 this.run();
             });
         },
-
         reset: function() {
             this.index = 0;
         },
@@ -53,6 +44,32 @@
 
         //Behaves like an Array's method
         push: [].push, sort: [].sort, splice: [].splice
+    };
+
+    var
+    Entry = function(queue, callback, argArray) {
+        this.queue = queue;
+        this.callback = callback;
+        this.argArray = argArray;
+    };
+    Entry.prototype = {
+        next: function() {
+            var queue = this.queue;
+
+            if( queue.index+1 in queue ) {
+                queue.run(queue.index++);
+            }
+            return null;
+        },
+
+        prev: function() {
+            var queue = this.queue;
+
+            if( queue.index-1 in queue ) {
+                return queue.run(queue.index--);
+            }
+            return null;
+        }
     };
 
     if(typeof define === "function" && define.amd)
