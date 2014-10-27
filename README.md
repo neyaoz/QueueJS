@@ -14,7 +14,7 @@ You can add your methods to the current state of the queue by ***put*** method.
 
 queue.run()
 -----------
-You can start the queue with the first call, and move to the next by ***run*** method.
+You can start the queue by ***run*** method.
 
 ---
 
@@ -29,26 +29,63 @@ queue.reset()
 
 ---
 
+entry.next()
+------------
+You can run the next entry in the queue by  ***next*** method.
+
+entry.prev()
+------------
+You can run the next entry in the queue by  ***next*** method.
+
+---
+
+###Example 1:
 ```js
-    function readData(file) {
-        $.get(file, function() {
-            this.run();
+function readData(file) {
+    $.get(file, function() {
+        this.run();
+    });
+};
+
+var queue  = new Queue();
+
+    queue.add(readData, "example-1.json");
+    queue.add(function() {
+        console.log("Call me.");
+        this.next();
+    });
+    queue.add(function() {
+        console.log("Call me too.");
+        this.next();
+    });
+
+    queue.run();
+```
+
+###Example 2:
+```js
+var queue = new Queue();
+
+    queue.add(function() {
+        console.log("1st Entry");
+        this.next();
+    });
+    queue.add(function() {
+        this.queue.put(function() {
+            console.log("4th Entry");
+            this.next();
         });
-    };
-
-    var queue  = new Queue();
-
-        queue.add(readData, "example-1.json");
-
-        queue.add(function() {
-            console.log("Call me.");
-            this.run();
+        this.queue.add(function() {
+            console.log("5th Entry");
+            this.next();
         });
+        console.log("2nd Entry");
+        this.next();
+    });
+    queue.add(function() {
+        console.log("3rd Entry");
+        this.next();
+    });
 
-        queue.add(function() {
-            console.log("Call me too.");
-            this.run();
-        });
-
-        queue.run();
+    queue.run();
 ```
