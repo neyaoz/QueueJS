@@ -18,7 +18,7 @@
         run: function() {
             var entry;
             if( entry = this[this.index] ) {
-                return entry.callback.call(entry, entry.argArray);
+                return entry.callback.apply(entry, entry.argArray);
             }
             return null;
         },
