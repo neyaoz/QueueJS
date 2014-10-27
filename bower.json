@@ -1,6 +1,6 @@
 {
   "name": "QueueJS",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Queue JS is a simple library which can call your methods in a order you specify.",
   "main": "queue.js",
   "authors": [

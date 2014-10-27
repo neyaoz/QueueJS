@@ -15,22 +15,27 @@
         put: function(callback, argArray) {
             this.splice(this.index+1, 0, new Entry(this, callback, [].slice.call(arguments, 1)));
         },
-        run: function() {
+        run: function(index) {
+            if(!index ) {
+                index = this.index;
+            }
+
             var entry;
-            if( entry = this[this.index] ) {
+            if( entry = this[index] ) {
+                this.index = index;
                 return entry.callback.apply(entry, entry.argArray);
             }
             return null;
         },
 
-        wait: function(ms) {
+        wait: function(ms, steps) {
             this.put(function() {
-                window.setTimeout(this.next.bind(this), ms);
+                window.setTimeout(this.next.bind(this,steps), ms);
             });
         },
-        skip: function(count) {
+        skip: function(steps) {
             this.add(function() {
-                this.queue.index += count;
+                this.queue.index += steps;
                 this.next();
             });
         },
@@ -53,21 +58,11 @@
         this.argArray = argArray;
     };
     Entry.prototype = {
-        next: function() {
-            var queue = this.queue;
-
-            if( queue.index+1 in queue ) {
-                return queue.run(queue.index++);
-            }
-            return null;
+        next: function(steps) {
+            return this.queue.run(this.queue.index+(steps||1));
         },
-        prev: function() {
-            var queue = this.queue;
-
-            if( queue.index-1 in queue ) {
-                return queue.run(queue.index--);
-            }
-            return null;
+        prev: function(steps) {
+            return this.next(-steps);
         }
     };
 

@@ -12,13 +12,13 @@ queue.put(callback, arg1, arg2, ..., argX)
 ------------------------------------------
 You can add your methods to the current state of the queue by ***put*** method.
 
-queue.run()
+queue.run(index = 0)
 -----------
 You can start the queue by ***run*** method.
 
 ---
 
-queue.wait(milliseconds)
+queue.wait(milliseconds, steps = 1)
 ------------------------
 
 queue.skip(steps)
@@ -29,13 +29,13 @@ queue.reset()
 
 ---
 
-entry.next()
+entry.next(steps = 1)
 ------------
 You can run the next entry in the queue by  ***next*** method.
 
-entry.prev()
+entry.prev(steps = 1)
 ------------
-You can run the next entry in the queue by  ***next*** method.
+You can run the next entry in the queue by  ***prev*** method.
 
 ---
 
