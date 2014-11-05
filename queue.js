@@ -9,11 +9,13 @@
         index: 0,
         length: 0,
 
-        add: function(callback, argArray) {
-            this.push(new Entry(this, callback, [].slice.call(arguments, 1)));
+        add: function(callback) {
+            this.push(new Entry(this, callback));
+            return this;
         },
-        put: function(callback, argArray) {
-            this.splice(this.index+1, 0, new Entry(this, callback, [].slice.call(arguments, 1)));
+        put: function(callback) {
+            this.splice(this.index+1, 0, new Entry(this, callback));
+            return this;
         },
         run: function(index) {
             if(!index ) {
@@ -23,28 +25,41 @@
             var entry;
             if( entry = this[index] ) {
                 this.index = index;
-                return entry.callback.apply(entry, entry.argArray);
+                if( entry.callback.apply(entry, [entry]) === true ) {
+                    entry.next();
+                    return true;
+                }
             }
-            return null;
-        },
 
-        wait: function(ms, steps) {
-            this.put(function() {
-                window.setTimeout(this.next.bind(this,steps), ms);
+            return false;
+        },
+        wait: function(ms) {
+            //TODO Can not be used inside of entry callback
+            return this.add(function() {
+                window.setTimeout(this.next.bind(this), ms);
             });
         },
         skip: function(steps) {
-            this.add(function() {
-                this.queue.index += steps;
-                this.next();
+            //TODO Can not be used inside of entry callback
+            return this.add(function() {
+                this.next(steps);
             });
         },
         reset: function() {
             this.index = 0;
+            return this;
         },
 
         toArray: function() {
-            return [].slice.call(this);
+            var i, cbArray = [];
+
+            for(i in this) {
+                if( this.hasOwnProperty(i) ) {
+                    cbArray.push(this[i].callback);
+                }
+            }
+
+            return cbArray;
         },
 
         //Behaves like an Array's method
@@ -52,10 +67,9 @@
     };
 
     var
-    Entry = function(queue, callback, argArray) {
+    Entry = function(queue, callback) {
         this.queue = queue;
         this.callback = callback;
-        this.argArray = argArray;
     };
     Entry.prototype = {
         next: function(steps) {
